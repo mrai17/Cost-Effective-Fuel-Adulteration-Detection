@@ -1,0 +1,6 @@
+  void _onDataReceived(List<int> value) {
+    String result = String.fromCharCodes(value);
+    setState(() {
+      _result = result;
+    });
+  }
