@@ -1,0 +1,36 @@
+  void _connect() async {
+    List<BluetoothDevice> devices = await FlutterBlue.instance.scanResults
+        .map((results) => results.device)
+        .toList();
+    for (BluetoothDevice device in devices) {
+      if (device.name == 'Petroleum Tester') {
+        _device = device;
+      }
+    }
+    await _device.connect();
+    List<BluetoothService> services = await _device.discoverServices();
+    for (BluetoothService service in services) {
+      if (service.uuid.toString() ==
+          '0000fff0-0000-1000-8000-00805f9b34fb') {
+        List<BluetoothCharacteristic> characteristics =
+            service.characteristics;
+        for (BluetoothCharacteristic characteristic in characteristics) {
+          if (characteristic.uuid.toString() ==
+              '0000fff4-0000-1000-8000-00805f9b34fb') {
+            _stream = characteristic.value;
+            setState(() {
+              _isConnected = true;
+            });
+            _stream.listen(_onDataReceived);
+          }
+        }
+      }
+    }
+  }
+
+  void _disconnect() async {
+    await _device.disconnect();
+    setState(() {
+      _isConnected = false;
+    });
+  }
