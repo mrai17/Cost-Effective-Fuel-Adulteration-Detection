@@ -1,0 +1,6 @@
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_blue: ^0.8.0
+  sqflite: ^2.0.0+3
+  path_provider: ^2.0.5
